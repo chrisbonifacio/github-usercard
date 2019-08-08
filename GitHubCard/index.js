@@ -3,14 +3,13 @@
            https://api.github.com/users/<your name>
 */
 
-import axios from "axios";
+const cards = document.querySelector(".cards");
 
-const myProfile = axios
+axios
   .get("https://api.github.com/users/chrisbonifacio")
   .then(response => {
-    const cards = document.querySelector(".cards");
     console.log(response);
-    cards.append(Card(response));
+    cards.append(Card(response.data));
   })
   .catch(err => {
     console.log(err);
@@ -37,7 +36,19 @@ const myProfile = axios
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = [
+  "tetondan",
+  "dustinmyers",
+  "justsml",
+  "luishrd",
+  "bigknell"
+];
+
+followersArray.forEach(follower => {
+  axios.get(`https://api.github.com/users/${follower}`).then(response => {
+    cards.append(Card(response.data));
+  });
+});
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
@@ -58,9 +69,10 @@ const followersArray = [];
 </div>
 
 */
+
 function Card(user) {
   const userCard = document.createElement("div");
-  card.classList.add("card");
+  userCard.classList.add("card");
 
   const userImg = document.createElement("img");
   userImg.src = user.avatar_url;
@@ -82,6 +94,7 @@ function Card(user) {
   const userProfile = document.createElement("p");
   const userProfileLink = document.createElement("a");
   userProfile.append(userProfileLink);
+  userProfileLink.href = user.html_url;
   userProfileLink.textContent = user.html_url;
 
   const userFollowers = document.createElement("p");
