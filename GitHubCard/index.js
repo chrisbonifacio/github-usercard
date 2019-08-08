@@ -3,6 +3,19 @@
            https://api.github.com/users/<your name>
 */
 
+import axios from "axios";
+
+const myProfile = axios
+  .get("https://api.github.com/users/chrisbonifacio")
+  .then(response => {
+    const cards = document.querySelector(".cards");
+    console.log(response);
+    cards.append(Card(response));
+  })
+  .catch(err => {
+    console.log(err);
+  });
+
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
    data in order to use it to build your component function 
@@ -45,6 +58,53 @@ const followersArray = [];
 </div>
 
 */
+function Card(user) {
+  const userCard = document.createElement("div");
+  card.classList.add("card");
+
+  const userImg = document.createElement("img");
+  userImg.src = user.avatar_url;
+
+  const userCardInfo = document.createElement("div");
+  userCardInfo.classList.add("card-info");
+
+  const userName = document.createElement("h3");
+  userName.classList.add("name");
+  userName.textContent = user.name;
+
+  const userUserName = document.createElement("p");
+  userUserName.classList.add("username");
+  userUserName.textContent = user.login;
+
+  const userLocation = document.createElement("p");
+  userLocation.textContent = user.location;
+
+  const userProfile = document.createElement("p");
+  const userProfileLink = document.createElement("a");
+  userProfile.append(userProfileLink);
+  userProfileLink.textContent = user.html_url;
+
+  const userFollowers = document.createElement("p");
+  userFollowers.textContent = user.followers;
+
+  const userFollowing = document.createElement("p");
+  userFollowing.textContent = user.following;
+
+  const userBio = document.createElement("p");
+  userBio.textContent = user.bio;
+
+  userCard.append(userImg);
+  userCard.append(userCardInfo);
+  userCardInfo.append(userName);
+  userCardInfo.append(userUserName);
+  userCardInfo.append(userLocation);
+  userCardInfo.append(userProfile);
+  userCardInfo.append(userFollowers);
+  userCardInfo.append(userFollowing);
+  userCardInfo.append(userBio);
+
+  return userCard;
+}
 
 /* List of LS Instructors Github username's: 
   tetondan
