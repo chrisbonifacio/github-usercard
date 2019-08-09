@@ -211,4 +211,5 @@ body {
 
 .card .graph {
   width: 100%;
+  height: auto;
 }

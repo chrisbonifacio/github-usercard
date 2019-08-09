@@ -31,7 +31,7 @@ axios
   })
   .then(response => {
     response.forEach(url => {
-      axios.get(`${url}`).then(response => {
+      axios.get(url).then(response => {
         cards.append(Card(response.data));
       });
     });
