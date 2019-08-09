@@ -15,6 +15,31 @@ axios
     console.log(err);
   });
 
+axios
+  .get("https://api.github.com/users/chrisbonifacio/followers")
+  .then(response => {
+    return response.data;
+  })
+  .then(response => {
+    const followerURLs = response.map(user => {
+      return user.url;
+    });
+
+    console.log(followerURLs);
+
+    return followerURLs;
+  })
+  .then(response => {
+    response.forEach(url => {
+      axios.get(`${url}`).then(response => {
+        cards.append(Card(response.data));
+      });
+    });
+  })
+  .catch(err => {
+    console.log(err);
+  });
+
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
    data in order to use it to build your component function 
@@ -89,7 +114,7 @@ function Card(user) {
   userUserName.textContent = user.login;
 
   const userLocation = document.createElement("p");
-  userLocation.textContent = user.location;
+  userLocation.textContent = `Location: ${user.location}`;
 
   const userProfile = document.createElement("p");
   const userProfileLink = document.createElement("a");
@@ -98,16 +123,34 @@ function Card(user) {
   userProfileLink.textContent = user.html_url;
 
   const userFollowers = document.createElement("p");
-  userFollowers.textContent = user.followers;
+  userFollowers.textContent = `Followers: ${user.followers}`;
 
   const userFollowing = document.createElement("p");
-  userFollowing.textContent = user.following;
+  userFollowing.textContent = `Following: ${user.following}`;
 
   const userBio = document.createElement("p");
-  userBio.textContent = user.bio;
+  userBio.textContent = `Bio: ${user.bio}`;
 
-  userCard.append(userImg);
-  userCard.append(userCardInfo);
+  const userCalendar = document.createElement("div");
+  userCalendar.classList.add("calendar");
+
+  const userGraph = document.createElement("img");
+  userGraph.classList.add("graph");
+  userGraph.src = `http://ghchart.rshah.org/${user.login}`;
+
+  // new GitHubCalendar(".calendar", user.login, {});
+
+  const cardContainer = document.createElement("div");
+  cardContainer.classList.add("card-container");
+
+  userCard.append(cardContainer);
+  userCard.append(userCalendar);
+
+  userCalendar.append(userGraph);
+
+  cardContainer.append(userImg);
+  cardContainer.append(userCardInfo);
+  // userCard.append(userCalendar);
   userCardInfo.append(userName);
   userCardInfo.append(userUserName);
   userCardInfo.append(userLocation);
